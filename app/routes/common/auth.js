@@ -32,3 +32,39 @@ async function findStudent(email) {
     };
 };
 
+router.post('/login', async(req, res)=> {
+    try {
+        if (req.body.email && req.body.password && req.body.method && req.body.method == 'teacher') {
+            let teacher = await findTeacher(req.body.email);
+            if(teacher.err || !teacher.found){
+                return res.status(400).send({error:teacher.error})
+            } else {
+                const result = await bcrypt.compare(req.body.password, teacher.password);
+                if(result) {
+                    let token = await jwt.sign({_id:teacher._id, user_type:teacher}, config.jwt_secret_key);
+                    res.json({teacher, token});
+                } else {
+                    return res.status(400).send({error:"Invalid password"});
+                };
+            } 
+        } else if (req.body.email && req.body.password && req.body.method && req.body.method == 'student'){
+            let student = await findStudent(req.body.email);
+            if(student.err || !student.found){
+                res.status(400).send({error:student.error});
+            } else {
+                const result = bcrypt.compareSync(req.body.password, student.password);
+                if (result) {
+                    const token = await jwt.sign({_id:student._id, user_type:student}, config.jwt_secret_key);
+                    res.json({student, token});
+                } else {
+                    return res.status(400).send({error: "Invalid password"});
+                };
+            };
+        } else {
+            return res.status(400).send({error: "Invalid or Not enough parameters!"});
+        };
+
+    } catch (error) {
+        return res.status(400).send({error: "Unable to Login"})
+    };
+});
