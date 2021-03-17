@@ -105,3 +105,5 @@ router.post('signup', (req, res) => {
         return res.status(400).send({ error: "Unable to Signup." });
     };
 });
+
+module.exports = router;

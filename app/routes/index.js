@@ -10,7 +10,6 @@ const material_t_Router = require('./teacher/material');
 const studentRouter = require('./student/profile');
 const batch_s_Router = require('./student/batch');
 const material_s_Router = require('./student/material');
-const { route } = require('..');
 
 // ------- Common Routes ------- //
 router.use('/', indexRouter);
