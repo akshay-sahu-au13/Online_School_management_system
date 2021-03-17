@@ -96,12 +96,12 @@ router.post('signup', (req, res) => {
                 await new_student.save();
                 let token = jwt.sign({ _id: new_student._id, user_type: 'student' }, config.jwt_secret_key);
                 res.json({ student: new_student, token });
-            }
+            };
 
         } else {
             return res.status(400).send({ error: "Not enough parameters" });
         }
     } catch (error) {
-        return res.status(400).send({ error: "Unable to Signup." })
-    }
+        return res.status(400).send({ error: "Unable to Signup." });
+    };
 });
