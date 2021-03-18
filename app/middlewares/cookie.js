@@ -27,6 +27,7 @@ module.exports.teacher = (req, res, next) => {
 
 module.exports.student = (req, res, next)=> {
     if (req.cookies.myAuthToken) {
+        console.log(req.cookies.myAuthToken)
         jwt.verify(req.cookies.myAuthToken, config.jwt_secret_key, (err, data) => {
             if (err) {
                 return res.status(401).send({ msg: "Invalid Authorization code" });
