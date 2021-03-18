@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('../middlewares/jwt');
+const cookie = require('../middlewares/cookie');
+const session = require('../middlewares/session');
 
 // Route imports
 const indexRouter = require('./common/index');

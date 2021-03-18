@@ -71,6 +71,51 @@ router.post('/login', async (req, res) => {
     };
 });
 
+
+router.post('/login_cookie', async (req, res) => {
+    try {
+        console.log(req.body)
+        if (req.body.email && req.body.password && req.body.method && req.body.method == 'teacher') {
+            let result = await findTeacher(req.body.email);
+            console.log(result)
+            if (result.err || !result.found) {
+                return res.status(400).send({ error: result.error })
+            } else {
+                const isMatch = await bcrypt.compare(req.body.password, result.teacher.password);
+                if (isMatch) {
+                    let token = await jwt.sign({ _id: result.teacher._id, user_type: "teacher" }, config.jwt_secret_key);
+                    res
+                    .cookie('myAuthToken', token, {httpOnly:true, maxAge:987654572, secure:false,sameSite:'none'})
+                    .send({ result, token });
+                } else {
+                    return res.status(400).send({ error: "Invalid password" });
+                };
+            }
+        } else if (req.body.email && req.body.password && req.body.method && req.body.method == 'student') {
+            let result = await findStudent(req.body.email);
+            if (result.err || !result.found) {
+                res.status(400).send({ error: result.student.error });
+            } else {
+                const isMatch = await bcrypt.compareSync(req.body.password, result.student.password);
+                if (isMatch) {
+                    const token = await jwt.sign({ _id: result.student._id, user_type: "student" }, config.jwt_secret_key);
+                    res
+                    .cookie('myAuthToken', token, {httpOnly:true, maxAge: 987656787, secure:false, sameSite: 'none'})
+                    .send({ result, token });
+                } else {
+                    return res.status(400).send({ error: "Invalid password" });
+                };
+            };
+        } else {
+            return res.status(400).send({ error: "Invalid or Not enough parameters!" });
+        };
+
+    } catch (error) {
+        return res.status(400).send({ error:error.message})
+    };
+});
+
+
 router.post('/signup', async(req, res) => {
     try {
         if (req.body.email && req.body.password && req.body.name && req.body.method && req.body.method == "teacher") {
