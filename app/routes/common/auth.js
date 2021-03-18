@@ -94,7 +94,7 @@ router.post('/login_cookie', async (req, res) => {
         } else if (req.body.email && req.body.password && req.body.method && req.body.method == 'student') {
             let result = await findStudent(req.body.email);
             if (result.err || !result.found) {
-                res.status(400).send({ error: result.student.error });
+                res.status(400).send({ error: result.error });
             } else {
                 const isMatch = await bcrypt.compareSync(req.body.password, result.student.password);
                 if (isMatch) {
