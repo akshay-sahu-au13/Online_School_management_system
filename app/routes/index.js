@@ -17,6 +17,8 @@ const authRouter = require('./common/auth');
 // ------- Common Routes ------- //
 router.use('/', indexRouter);
 router.use('/auth', authRouter);
+router.use('/student', cookie.student, indexRouter);
+router.use('/teacher', cookie.teacher, indexRouter);
 
 // ------ Teacher Routes ------- //
 // router.use('/teacher/profile', teacherRouter);
