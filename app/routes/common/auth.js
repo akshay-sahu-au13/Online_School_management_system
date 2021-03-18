@@ -69,7 +69,7 @@ router.post('/login', async (req, res) => {
     };
 });
 
-router.post('signup', (req, res) => {
+router.post('signup', async(req, res) => {
     try {
         if (req.body.email && req.body.password && req.body.name && req.body.method && req.body.method == "teacher") {
             let teacher = await findTeacher(req.body.email);

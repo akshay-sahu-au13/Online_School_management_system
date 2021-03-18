@@ -22,12 +22,13 @@ mongoose.connect('mongodb://localhost/schoolapp', {
 if (process.env.NODE_ENV!="production"){
     app.use(morgan());
 };
-
+// router from index.js inside routes folder
 app.use(router);
 
 app.use(function(req, res, next){
     res.status(404).send({code:404, error: "You seem to be lost"});
 });
+
 
 app.listen(PORT, ()=> {
     console.log(`Server started on http://localhost:${PORT}`);
