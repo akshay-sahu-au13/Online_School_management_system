@@ -19,7 +19,9 @@ const img_upload = multer({
 router.get('/', async (req, res) => {
     try {
         console.log("Student profile home: ", req.user);
-        const user = await Student.findById(req.user._id).lean();
+        // const user = await Student.findById(req.user._id).lean();       // for cookies
+        const user = await Student.findById(req.session.user._id).lean();  // for session
+
         res.status(200).send({ Student: user });
     } catch (error) {
         return res.status(404).send({ error: error.message });

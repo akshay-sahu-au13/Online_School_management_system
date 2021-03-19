@@ -83,7 +83,7 @@ router.post('/login_session', async(req, res)=> {
             } else {
                 const isMatch = await bcrypt.compare(req.body.password, result.teacher.password);
                 if (isMatch) {
-                    req.session.user = {_id: result.student._id, user_type: "teacher"};
+                    req.session.user = {_id: result.teacher._id, user_type: "teacher"};
                     req.session.isLoggedin = true;
                     res.json({teacher: result.teacher});
                 } else {
