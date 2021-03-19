@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
     try {
         console.log("Student profile home: ", req.user);
         const user = await Student.findById(req.user._id).lean();
-        res.status(200).send({ user });
+        res.status(200).send({ Student: user });
     } catch (error) {
         return res.status(404).send({ error: error.message });
 
