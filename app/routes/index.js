@@ -21,12 +21,16 @@ router.use('/auth', authRouter);
 // router.use('/teacher', cookie.teacher, indexRouter);
 
 // ------ Teacher Routes ------- //
-router.use('/teacher/profile', cookie.teacher, teacherRouter);
+// router.use('/teacher/profile', cookie.teacher, teacherRouter);    // Auth using cookies
+router.use('/teacher/profile', session.teacher, teacherRouter);      // Auth using sessions
+
 // router.use('/teacher/batch', batch_t_Router);
 // router.use('/teacher/material', material_t_Router);
 
 // // ------ Student Routes ------ //
-router.use('/student/profile/', cookie.student, studentRouter);
+// router.use('/student/profile/', cookie.student, studentRouter);   // Auth using cookies
+router.use('/student/profile/', session.student, studentRouter);     // Auth using sessions
+
 // // router.use('/student/profile/get_mobile', studentRouter);
 // router.use('/student/batch', batch_s_Router);
 // router.use('/student/material', material_s_Router);

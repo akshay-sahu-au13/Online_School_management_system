@@ -2,7 +2,7 @@
 // const router = express.Router();
 
 module.exports.teacher = function(req, res, next) {
-    if (req.session.user && req.user.isLoggedin == true) {
+    if (req.session.user && req.session.isLoggedin == true) {
         if (req.session.user.user_type == "teacher"){
             next();
         } else {
@@ -14,7 +14,7 @@ module.exports.teacher = function(req, res, next) {
 };
 
 module.exports.student = function(req, res, next) {
-    if (req.session.user && req.user.isLoggedin == true) {
+    if (req.session.user && req.session.isLoggedin == true) {
         if (req.session.user.user_type == "student"){
             next();
         } else {
