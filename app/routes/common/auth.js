@@ -71,7 +71,51 @@ router.post('/login', async (req, res) => {
     };
 });
 
+// _____________LOGIN using SESSION _______________ //
+router.post('/login_session', async(req, res)=> {
+    try {
+        console.log(req.body)
+        if (req.body.email && req.body.password && req.body.method && req.body.method == 'teacher') {
+            let result = await findTeacher(req.body.email);
+            console.log("Teacher Session login:",result);
+            if (result.err || !result.found) {
+                return res.status(400).send({ error: result.error })
+            } else {
+                const isMatch = await bcrypt.compare(req.body.password, result.teacher.password);
+                if (isMatch) {
+                    req.session.user = {_id: result.student._id, user_type: "teacher"};
+                    req.session.isLoggedin = true;
+                    res.json({teacher: result.teacher});
+                } else {
+                    return res.status(400).send({ error: "Invalid password" });
+                };
+            }
+        } else if (req.body.email && req.body.password && req.body.method && req.body.method == 'student') {
+            let result = await findStudent(req.body.email);
+            if (result.err || !result.found) {
+                res.status(400).send({ error: result.student.error });
+            } else {
+                const isMatch = await bcrypt.compareSync(req.body.password, result.student.password);
+                if (isMatch) {
+                    req.session.user = {_id:result.student._id, user_type: "student"};
+                    req.session.isLoggedin = true;
+                    res.json({ student:result.student });
+                } else {
+                    return res.status(400).send({ error: "Invalid password" });
+                };
+            };
+        } else {
+            return res.status(400).send({ error: "Invalid or Not enough parameters!" });
+        };
 
+    } catch (error) {
+        return res.status(400).send({ error:error.message})
+    };
+});
+
+
+
+// _____________LOGIN using COOKIES_________________ //
 router.post('/login_cookie', async (req, res) => {
     try {
         console.log(req.body)
